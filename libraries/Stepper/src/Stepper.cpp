@@ -53,25 +53,13 @@
  *    9  1  0  1  0  1
  *   10  0  0  1  0  1
  *
- * The sequence of control signals for 4 control wires full drive is as follows:
+ * The sequence of control signals for 4 control wires is as follows:
  *
  * Step C0 C1 C2 C3
  *    1  1  0  1  0
  *    2  0  1  1  0
  *    3  0  1  0  1
  *    4  1  0  0  1
- *
- * The sequence of control signals for 4 control wires half drive is as follows:
- *
- * Step C0 C1 C2 C3
- *    1  1  0  0  0
- *    2  1  1  0  0
- *    3  0  1  0  0
- *    4  0  1  1  0
- *    5  0  0  1  0
- *    6  0  0  1  1
- *    7  0  0  0  1
- *    8  1  0  0  1
  *
  * The sequence of controls signals for 2 control wires is as follows
  * (columns C1 and C2 from above):
@@ -190,17 +178,6 @@ void Stepper::setSpeed(long whatSpeed)
 }
 
 /*
- * Sets the half drive mode
- */
-void Stepper::setHalfDrive(bool half_drive)
-{
-  if(this->pin_count == 4)
-  {
-    this->half_drive = half_drive;
-  }
-}
-
-/*
  * Moves the motor steps_to_move steps.  If the number is negative,
  * the motor moves in the reverse direction.
  */
@@ -243,8 +220,6 @@ void Stepper::step(int steps_to_move)
       // step the motor to step number 0, 1, ..., {3 or 10}
       if (this->pin_count == 5)
         stepMotor(this->step_number % 10);
-      else if (this->half_drive)
-        stepMotor(this->step_number % 8);
       else
         stepMotor(this->step_number % 4);
     }
@@ -276,8 +251,7 @@ void Stepper::stepMotor(int thisStep)
       break;
     }
   }
-
-  if (this->pin_count == 4 && !this->half_drive) {
+  if (this->pin_count == 4) {
     switch (thisStep) {
       case 0:  // 1010
         digitalWrite(motor_pin_1, HIGH);
@@ -291,66 +265,13 @@ void Stepper::stepMotor(int thisStep)
         digitalWrite(motor_pin_3, HIGH);
         digitalWrite(motor_pin_4, LOW);
       break;
-      case 2:  // 0101
+      case 2:  //0101
         digitalWrite(motor_pin_1, LOW);
         digitalWrite(motor_pin_2, HIGH);
         digitalWrite(motor_pin_3, LOW);
         digitalWrite(motor_pin_4, HIGH);
       break;
-      case 3:  // 1001
-        digitalWrite(motor_pin_1, HIGH);
-        digitalWrite(motor_pin_2, LOW);
-        digitalWrite(motor_pin_3, LOW);
-        digitalWrite(motor_pin_4, HIGH);
-      break;
-    }
-  }
-
-  if (this->pin_count == 4 && this->half_drive) {
-    switch (thisStep) {
-      case 0:  // 1000
-        digitalWrite(motor_pin_1, HIGH);
-        digitalWrite(motor_pin_2, LOW);
-        digitalWrite(motor_pin_3, LOW);
-        digitalWrite(motor_pin_4, LOW);
-      break;
-      case 1:  // 1100
-        digitalWrite(motor_pin_1, HIGH);
-        digitalWrite(motor_pin_2, HIGH);
-        digitalWrite(motor_pin_3, LOW);
-        digitalWrite(motor_pin_4, LOW);
-      break;
-      case 2:  // 0100
-        digitalWrite(motor_pin_1, LOW);
-        digitalWrite(motor_pin_2, HIGH);
-        digitalWrite(motor_pin_3, LOW);
-        digitalWrite(motor_pin_4, LOW);
-      break;
-      case 3:  // 0110
-        digitalWrite(motor_pin_1, LOW);
-        digitalWrite(motor_pin_2, HIGH);
-        digitalWrite(motor_pin_3, HIGH);
-        digitalWrite(motor_pin_4, LOW);
-      break;
-      case 4:  // 0010
-        digitalWrite(motor_pin_1, LOW);
-        digitalWrite(motor_pin_2, LOW);
-        digitalWrite(motor_pin_3, HIGH);
-        digitalWrite(motor_pin_4, LOW);
-      break;
-      case 5:  // 0011
-        digitalWrite(motor_pin_1, LOW);
-        digitalWrite(motor_pin_2, LOW);
-        digitalWrite(motor_pin_3, HIGH);
-        digitalWrite(motor_pin_4, HIGH);
-      break;
-      case 6:  // 0001
-        digitalWrite(motor_pin_1, LOW);
-        digitalWrite(motor_pin_2, LOW);
-        digitalWrite(motor_pin_3, LOW);
-        digitalWrite(motor_pin_4, HIGH);
-      break;
-      case 7:  // 1001
+      case 3:  //1001
         digitalWrite(motor_pin_1, HIGH);
         digitalWrite(motor_pin_2, LOW);
         digitalWrite(motor_pin_3, LOW);

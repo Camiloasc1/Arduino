@@ -53,25 +53,13 @@
  *    9  1  0  1  0  1
  *   10  0  0  1  0  1
  *
- * The sequence of control signals for 4 control wires full drive is as follows:
+ * The sequence of control signals for 4 control wires is as follows:
  *
  * Step C0 C1 C2 C3
  *    1  1  0  1  0
  *    2  0  1  1  0
  *    3  0  1  0  1
  *    4  1  0  0  1
- *
- * The sequence of control signals for 4 control wires half drive is as follows:
- *
- * Step C0 C1 C2 C3
- *    1  1  0  0  0
- *    2  1  1  0  0
- *    3  0  1  0  0
- *    4  0  1  1  0
- *    5  0  0  1  0
- *    6  0  0  1  1
- *    7  0  0  0  1
- *    8  1  0  0  1
  *
  * The sequence of controls signals for 2 control wires is as follows
  * (columns C1 and C2 from above):
@@ -105,9 +93,6 @@ class Stepper {
     // speed setter method:
     void setSpeed(long whatSpeed);
 
-    // half drive mode setter method:
-    void setHalfDrive(bool half_drive);
-
     // mover method:
     void step(int number_of_steps);
 
@@ -119,7 +104,6 @@ class Stepper {
     int direction;            // Direction of rotation
     unsigned long step_delay; // delay between steps, in ms, based on speed
     int number_of_steps;      // total number of steps this motor can take
-    bool half_drive;        // whether the motor is controlled on half drive mode
     int pin_count;            // how many pins are in use.
     int step_number;          // which step the motor is on
 
