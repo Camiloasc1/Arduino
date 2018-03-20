@@ -15,8 +15,10 @@ void loop()
   // Change direction at the limit
   if (stepper.distanceToGo() == 0) {
     Serial.println("Change");
-    stepper.stop();
+    Serial.println(stepper.currentPosition());
+    stepper.disableOutputs();
     delay(5000);
+    stepper.enableOutputs();
     stepper.moveTo(-stepper.currentPosition());
   }
   stepper.run();

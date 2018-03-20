@@ -1,4 +1,4 @@
-const int PIN_BUZZER = 9;
+const int PIN_BUZZER = 8;
 const int sirenPeriodms = 2000;
 const int sirenStepms = 1;
 const float sirenSteps = sirenPeriodms / sirenStepms / 2;
