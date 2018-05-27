@@ -1,7 +1,9 @@
 #include <AccelStepper.h>
 
+const int MOTOR_STEPS = -1024; // Half turn
+const int DELAY_FEED_CYCLE = 12; // Every 12 hours or so
+const int DELAY_HOUR = 60 * 60 * 1000;
 const int PIN_BUZZER = 7;
-const int DELAY_FEED_CYCLE = 5 * 1000;
 
 AccelStepper stepper(AccelStepper::FULL4WIRE, 8, 10, 9, 11); // For 28BYJ-48 swap pins 2 and 3
 
@@ -32,7 +34,7 @@ void setup()
 {
   pinMode(PIN_BUZZER, OUTPUT);
 
-  stepper.setMaxSpeed(1024);
+  stepper.setMaxSpeed(256);
   stepper.setAcceleration(256);
 }
 
@@ -49,7 +51,7 @@ void loop()
   tone(PIN_BUZZER, FEEDING_TONE, FEEDING_TONE_DURATION);
 
   // Turn once
-  stepper.move(2048);
+  stepper.move(MOTOR_STEPS);
   stepper.enableOutputs();
   while (stepper.distanceToGo() != 0) {
     // Run the motor
@@ -74,6 +76,8 @@ void loop()
   }
 
   // Wait until the next feed cycle
-  delay(DELAY_FEED_CYCLE);
+  for (int h = 0; h < DELAY_FEED_CYCLE; h++) {
+    delay(DELAY_HOUR);
+  }
 }
 
