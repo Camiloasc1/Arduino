@@ -2,7 +2,6 @@
 
 const int MOTOR_STEPS = -1024; // Half turn
 const int DELAY_FEED_CYCLE = 12; // Every 12 hours or so
-const int DELAY_HOUR = 60 * 60 * 1000;
 const int PIN_BUZZER = 7;
 
 AccelStepper stepper(AccelStepper::FULL4WIRE, 8, 10, 9, 11); // For 28BYJ-48 swap pins 2 and 3
@@ -32,6 +31,7 @@ const int FEEDING_TONE_DURATION = 500;
 
 void setup()
 {
+  pinMode(LED_BUILTIN, OUTPUT);
   pinMode(PIN_BUZZER, OUTPUT);
 
   stepper.setMaxSpeed(256);
@@ -76,8 +76,15 @@ void loop()
   }
 
   // Wait until the next feed cycle
+  bool LedState = false;
   for (int h = 0; h < DELAY_FEED_CYCLE; h++) {
-    delay(DELAY_HOUR);
+    for (int m = 0; m < 60; m++) {
+      for (int s = 0; s < 60; s++) {
+        LedState = !LedState;
+        digitalWrite(LED_BUILTIN, LedState);
+        delay(1000);
+      }
+    }
   }
 }
 
